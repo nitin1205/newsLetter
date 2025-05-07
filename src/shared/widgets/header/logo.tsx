@@ -43,7 +43,7 @@ export default function Logo() {
         </g>
       </g>
     </svg>
-    <h5 className="absolute right-[-45px] xl:right-[-45px] pt-1 font-medium text-2xl">
+    <h5 className="absolute right-[-35px] md:right-[-45px] pt-1 font-medium md:text-2xl text-xl">
       ShadyMedia
     </h5>
   </div>

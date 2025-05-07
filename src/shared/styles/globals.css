@@ -4,6 +4,14 @@
 @source '../../../node_modules/@heroui/theme/dist*.{js,ts,jsx,tsx}';
 @custom-variant dark (&:is(.dark *));
 
+
+
+@theme {
+  --font-clashDisplay: var(--font-clashDisplay)
+}
+
+
+/* 
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -21,10 +29,48 @@
     --background: #0a0a0a;
     --foreground: #ededed;
   }
-}
+} */
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  /* background: var(--background); */
+  /* color: var(--foreground); */
   font-family: Arial, Helvetica, sans-serif;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+.spin-slow {
+  animation: spin 30s linear infinite; /* Adjust the time for the speed of the spin */
+}
+.font-style {
+  /* background: #fec8eb; */
+  padding: 0px 5px;
+}
+.benefit-cover {
+  background-image: url("https://res.cloudinary.com/dkg6jv4l0/image/upload/v1706912822/lmpydkyegtpbhecq1ejw.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.input {
+  width: 100%;
+  background: transparent;
+  padding: 5px;
+  outline: none;
+}
+.jswdLm .blockbuilder-branding{
+  display: none!important;
 }
