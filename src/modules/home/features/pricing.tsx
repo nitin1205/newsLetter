@@ -1,6 +1,8 @@
 'use client'
+import { Button } from "@heroui/react";
 import { useState } from "react"
 
+import PricingCard from "@/shared/components/cards/pricingCard";
 
 function Pricing() {
     const [active, setActive] = useState('Monthly');
@@ -14,8 +16,26 @@ function Pricing() {
                     >
                         Pricing
                     </h3>
+                    <p className="text-3xl">Simple. Predictible. Built for you.</p>
+                </div>
+                <div className="flex items-center mt-2 md:mt-0">
+                    <Button className={`${active === 'Monthly' ? 'bg-[#3843d0] text-white' : 'bg-white text-black' } 
+                        rounded-r-[0] !p-7 text-2xl !px-16 border border-[#000]`}
+                        onPress={() => setActive("Monthly")}
+                    >
+                        Monthly
+                    </Button>
+                    
+                    <Button className={`${active === 'Yearly' ? 'bg-[#3843d0] text-white' : 'bg-white text-black' } 
+                        rounded-l-[0] !p-7 text-2xl !px-16 border border-[#000]`}
+                        onPress={() => setActive("Yearly")}
+                    >
+                        Yearly
+                    </Button>
                 </div>
             </div>
+            
+            <PricingCard active={active}/>
         </div>
     </div>
   )
