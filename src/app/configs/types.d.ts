@@ -13,7 +13,8 @@ type PlanType = {
 type DashboardSideBarTypes = {
     title: string;
     url: string;
-    icon: unknown;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    icon: any;
 }
 
 type SubscribersDataTypes ={

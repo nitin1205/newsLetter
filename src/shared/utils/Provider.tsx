@@ -1,6 +1,8 @@
 "use client"
+import { useUser } from "@clerk/nextjs";
 import { HeroUIProvider } from "@heroui/react"
 import { usePathname } from "next/navigation"
+import DashboardSidebar from "@/shared/widgets/dashboard/sidebar/dashboardSidebar";
 
 interface ProviderProps {
     children: React.ReactNode;
@@ -8,6 +10,10 @@ interface ProviderProps {
 
 export default function Providers({children}: ProviderProps) {
     const pathname = usePathname();
+
+    const {isLoaded} = useUser()
+
+    if(!isLoaded) return null;
 
     return(
         <HeroUIProvider>
@@ -17,7 +23,10 @@ export default function Providers({children}: ProviderProps) {
             pathname !== '/subscribe' &&
             pathname !== '/sign-in' ? (
                 <div className="w-full flex">
-                    <div className="w-[290px] h-screen overflow-y-scroll"></div>
+                    <div className="w-[290px] h-screen overflow-y-scroll">
+                        <DashboardSidebar/>
+                    </div>
+                    {children}
                 </div>
             ) : (
                 <>{children}</>
