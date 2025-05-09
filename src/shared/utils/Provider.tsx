@@ -1,7 +1,9 @@
 "use client"
 import { useUser } from "@clerk/nextjs";
 import { HeroUIProvider } from "@heroui/react"
-import { usePathname } from "next/navigation"
+import { Toaster } from "react-hot-toast";
+import { usePathname } from "next/navigation";
+
 import DashboardSidebar from "@/shared/widgets/dashboard/sidebar/dashboardSidebar";
 
 interface ProviderProps {
@@ -32,6 +34,7 @@ export default function Providers({children}: ProviderProps) {
                 <>{children}</>
             )                
         }
+         <Toaster position="top-center" reverseOrder={false} />
         </HeroUIProvider>
     );
 }
