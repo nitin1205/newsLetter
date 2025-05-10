@@ -1,16 +1,21 @@
 'use client'
 
 import { Button } from "@heroui/react";
-import { useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { useClerk } from "@clerk/nextjs";
 
 import { ICONS } from "@/shared/utils/icons";
+import { getEmails } from "@/actions/getEmail";
 
 function Write() {
     const [emailTitle, setEmailTitle] = useState("");
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const [emails, setEmails] = useState<any>([]); 
     const [open, SetOpen] = useState(false);
     const router = useRouter();
+    const { user } = useClerk()
 
     const handleCreate = () => {
         if(emailTitle.length === 0) {
@@ -20,6 +25,21 @@ function Write() {
             router.push(`/dashboard/new-email?subject=${formattedTitle}`);
         }
     };
+
+    const findEmails = useCallback(async () => {
+        await getEmails({ newsLetterOwnerId: user?.id as string })
+        .then((res) => {
+            setEmails(res);
+        })
+        .catch((e) => {
+            console.log(e);
+        })
+    }, [user?.id])
+
+    useEffect(() => {
+        findEmails()
+    }, [user, findEmails])
+
   return (
     <div className="w-full flex p-5 flex-wrap gap-6 relative">
         <div className="w-[200px] h-[200px] bg-slate-50 flex flex-col items-center 
