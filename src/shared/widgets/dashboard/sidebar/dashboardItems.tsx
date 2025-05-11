@@ -47,10 +47,10 @@ function DashboardItems({bottomContent}: {bottomContent?: boolean}) {
                         <Link key={index} className="p-2 py-5 flex items-center"
                             href={item.url === "/" ? `/subscribe?username=${user?.username}`: item.url}
                         >
-                            <span className={`text-xl mr-2 ${item.url === activeRoute && 'text-[#463bbd]'}`}>
+                            <span className={`text-3xl mr-2 ${item.url === activeRoute && 'text-[#463bbd]'}`}>
                                 {item.icon}
                             </span>
-                            <span className={`te© 2024 ShadyMedia, Inc. All rights reserved.xt-xl mr-2 ${item.url === activeRoute && 'text-[#463bbd]'}`}>
+                            <span className={`text-xl mr-2 ${item.url === activeRoute && 'text-[#463bbd]'}`}>
                                 {item.title}
                             </span>
                         </Link>

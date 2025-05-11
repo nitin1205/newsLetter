@@ -5,9 +5,11 @@ import { useCallback, useEffect, useState } from "react"
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { useClerk } from "@clerk/nextjs";
+import Link from "next/link";
 
 import { ICONS } from "@/shared/utils/icons";
 import { getEmails } from "@/actions/getEmail";
+import { EmailSchemaDocument } from "@/models/emailModel";
 
 function Write() {
     const [emailTitle, setEmailTitle] = useState("");
@@ -29,7 +31,7 @@ function Write() {
     const findEmails = useCallback(async () => {
         await getEmails({ newsLetterOwnerId: user?.id as string })
         .then((res) => {
-            setEmails(res);
+            setEmails(JSON.parse(res as string));
         })
         .catch((e) => {
             console.log(e);
@@ -38,7 +40,13 @@ function Write() {
 
     useEffect(() => {
         findEmails()
-    }, [user, findEmails])
+    }, [user, findEmails]);
+
+    const deleteHandler = async (id: string) => {
+        // await Email.deleteOne({
+        //     _id: id 
+        // })
+    }
 
   return (
     <div className="w-full flex p-5 flex-wrap gap-6 relative">
@@ -49,6 +57,29 @@ function Write() {
             <span className="text-2xl block text-center mb-3">{ICONS.plus}</span>
             <h5 className="text-2xl ">Create New</h5>
         </div>
+
+        {/* saved emails */}
+        {
+            emails && emails.map((email: EmailSchemaDocument)=> {
+                const formattedTitle = email?.title .replace(/\s+/g, "-").replace(/&/g, "-");
+                return(
+                    <div key={email?._id}
+                        className="w-[200px] h-[200px] z-[0] relative bg-slate-50 flex flex-col 
+                        items-center justify-center rounded border border-gray-200 shadow-sm cursor-pointer"
+                    >
+                        <span   className="absolute block z-20 right-2 top-2 text-2xl cursor-pointer" 
+                           onClick={() => deleteHandler(email?._id as string)} 
+                        >
+                            {ICONS.delete}
+                        </span>
+                        <Link href={`/dashboard/new-email?subject=${formattedTitle}`} className="text-3xl">
+                            {email.title}
+                        </Link>
+                    </div>
+                );
+            })
+        }
+
         {
             open && (
                 <div className="absolute flex items-center justify-center top-0 left-0 bg-[#00000028] h-screen w-full">

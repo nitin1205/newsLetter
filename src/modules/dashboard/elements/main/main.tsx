@@ -70,7 +70,7 @@ function Main() {
                     <small className={`w-[70%] text-sm overflow-hidden overflow-ellipsis 
                       whitespace-nowrap copy-text ${copied ? "bg-blue-200" : "bg-transparent"}`}
                     >
-                      https://ShadyMedia-newsletter.shady.com/
+                      {process.env.NEXT_PUBLIC_WEBSITE_URL}/subscribe?username={user?.username}
                     </small>
 
                     <div className="absolute h-[38px] w-[90px] rounded-r-lg bg-[#DFE7FF] right-0 flex items-center justify-center">

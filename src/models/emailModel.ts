@@ -1,6 +1,7 @@
 import { model, models, Schema } from "mongoose";
 
 export interface EmailSchemaDocument {
+    _id?: string;
     title: string;
     content: string;
     newsLetterOwnerId: string;

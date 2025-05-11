@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useClerk } from "@clerk/nextjs";
 import EmailEditor, { EditorRef, EmailEditorProps } from "react-email-editor";
 import { useRouter } from "next/navigation";
@@ -9,9 +9,10 @@ import { DefaultJsonData } from "@/assets/mails/default";
 import { Button } from "@heroui/react";
 import { saveEmail } from "@/actions/saveEmail";
 import toast from "react-hot-toast";
+import { getEmailDetails } from "@/actions/getEmailDetails";
 
 function Emaileditor({subjectTitle}: {subjectTitle: string}) {
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [jsonData, setJsonData] = useState<any | null>(DefaultJsonData);
     const {user} = useClerk();
@@ -22,10 +23,31 @@ function Emaileditor({subjectTitle}: {subjectTitle: string}) {
       const unlayer = emailEditorRef.current?.editor;
       
       unlayer?.exportHtml((data) => {
-        const { design, html } = data;
+        const { design,  /*html */ } = data;
         setJsonData(design);
       });
     };
+
+    const emailDetails = useCallback(async() => {
+      try{
+          const email = await getEmailDetails({
+            title: subjectTitle,
+            newsLetterOwnerId: user?.id as string
+          })
+          if(email && email!= 'null'){
+            const jsonDataObject = JSON.parse(email);
+            setJsonData(()=> JSON.parse(jsonDataObject?.content));
+          }
+          setLoading(false);
+
+      } catch(error) {
+        console.log(error);
+      }
+    }, [subjectTitle, user?.id])
+
+    useEffect(() => {
+      emailDetails();
+    }, [emailDetails, user]);
 
     const onReady: EmailEditorProps["onReady"] = () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -35,7 +57,6 @@ function Emaileditor({subjectTitle}: {subjectTitle: string}) {
 
     const saveDraft = () => {
       const unlayer = emailEditorRef.current?.editor;
-
       unlayer?.exportHtml(async (data) => {
         const {design} = data;
         await saveEmail({
