@@ -1,46 +1,90 @@
 'use client'
-// import { useState } from 'react';
+import { subscribersAnalytics } from '@/actions/subscribersAnalytics';
+import { useCallback, useEffect, useMemo } from 'react';
+import { useState } from 'react';
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 
 
-// interface SubscribersAnalyticsData {
-//     month: string;
-//     count: string;
-// }
+interface SubscribersAnalyticsData {
+    month: string;
+    count: string;
+}
 
 function SubscribersChart() {
-    // const [subscribersData, setSubscriberData] = useState<any>([])
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const [subscribersData, setSubscriberData] = useState<any>([])
+    const [loading, setLoading] = useState(true)
 
-    const data = [
-    {
-      month: "Jan 2024",
-      count: 2400,
-    },
-    {
-      month: "Feb 2024",
-      count: 1398,
-    },
-    {
-      month: "March 2024",
-      count: 9800,
-    },
-    {
-      month: "April 2024",
-      count: 3908,
-    },
-    {
-      month: "May 2024",
-      count: 4800,
-    },
-    {
-      month: "Jun 2024",
-      count: 3800,
-    },
-    {
-      month: "July 2024",
-      count: 4300,
-    },
-  ];
+  //   const data = [
+  //   {
+  //     month: "Jan 2024",
+  //     count: 2400,
+  //   },
+  //   {
+  //     month: "Feb 2024",
+  //     count: 1398,
+  //   },
+  //   {
+  //     month: "March 2024",
+  //     count: 9800,
+  //   },
+  //   {
+  //     month: "April 2024",
+  //     count: 3908,
+  //   },
+  //   {
+  //     month: "May 2024",
+  //     count: 4800,
+  //   },
+  //   {
+  //     month: "Jun 2024",
+  //     count: 3800,
+  //   },
+  //   {
+  //     month: "July 2024",
+  //     count: 4300,
+  //   },
+  // ];
+
+
+  const data: SubscribersAnalyticsData[] = useMemo(() => {
+    return []
+  }, []);
+
+
+  const getSubscriberAnalyticsData = useCallback(async () => {
+    await subscribersAnalytics().then((res) => {
+      setSubscriberData(JSON.parse(res as string))
+    }) 
+  }, []);
+
+  
+  
+  
+  const dataSetter = useCallback(() => {
+    if(subscribersData.length !== 0) {
+      subscribersData?.last7Months?.forEach((item: SubscribersAnalyticsData) => {
+        data.push({
+          month: item?.month,
+          count: item?.count,
+        });
+      });
+      setLoading(false);
+    } 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[subscribersData.length])
+
+  useEffect(() => {
+    getSubscriberAnalyticsData()
+  }, [getSubscriberAnalyticsData])
+
+  useEffect(() => {
+    dataSetter()
+  }, [dataSetter])
+  
+  console.log(data)
+
+
 
   return (
     <div className='my-5 p-5 bg-white w-full md:h-[55vh] xl:h-[60vh] border border-gray-200 shadow-xs'>
@@ -55,7 +99,14 @@ function SubscribersChart() {
             </div>
         </div>
 
-        <ResponsiveContainer width="100%" height="85%" className="mt-5">
+        { loading ?
+          <div>
+            <h5 className='h-100 text-xl flex items-center justify-center min-w-full'>
+              Loading...
+            </h5>
+          </div>
+        : (
+          <ResponsiveContainer width="100%" height="85%" className="mt-5">
             <LineChart
                 width={500}
                 height={200}
@@ -75,7 +126,9 @@ function SubscribersChart() {
                     fill='#EB4898'
                />
             </LineChart>
-        </ResponsiveContainer>      
+        </ResponsiveContainer>
+        )
+      }      
     </div>
   )
 }
