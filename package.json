@@ -10,7 +10,11 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^6.19.1",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
     "@heroui/react": "^2.8.0-beta.4",
+    "@mui/material": "^7.1.0",
+    "@mui/x-data-grid": "^8.3.0",
     "framer-motion": "^12.10.0",
     "jotai": "^2.12.4",
     "mongoose": "^8.14.2",
@@ -22,7 +26,8 @@
     "react-hot-toast": "^2.5.2",
     "react-icons": "^5.5.0",
     "recharts": "^2.15.3",
-    "stargate-mongoose": "^0.6.10"
+    "stargate-mongoose": "^0.6.10",
+    "timeago.js": "^4.0.2"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

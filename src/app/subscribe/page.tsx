@@ -19,9 +19,10 @@ function Page() {
         setLoading(true);
         await subscribe({email: value, username})
         .then((res) => {
+            const responseObject = JSON.parse(res as string);
             setLoading(false);
-            if(res.error) {
-                toast.error(res.error)
+            if(responseObject?.error) {
+                toast.error(responseObject?.error)
             } else {
                 toast.success("You are subscribed successfully");
             }

@@ -1,7 +1,7 @@
 "use server"
 import Subscriber from "@/models/subscribersModels"
 import { connectDb } from "@/shared/libs/db"
-import { validateEamil } from "@/shared/utils/zeroBounceAPI"
+import { validateEamil } from "@/shared/utils/zeroBounceAPI";
 import { clerkClient } from "@clerk/nextjs/server"
 
  
@@ -35,13 +35,13 @@ export const subscribe = async ({
         });
 
         if(isSubscriber) {
-            return { error: 'Email already exists'};
+            return JSON.stringify({ error: 'Email already exists'});
         }
 
-        // valiadte response
+        // valiadte email
         const validateResponse = await validateEamil({ email })
         if(validateResponse.status === 'invalid') {
-            return { error: "Email not vaild!" };
+            return JSON.stringify({ error: "Email not vaild!" });
         }
 
         const subscriber = await Subscriber.create({
@@ -49,7 +49,7 @@ export const subscribe = async ({
             newsLetterOwnerId: newsletterOwner?.id
         });
 
-        return subscriber;
+        return JSON.stringify(subscriber);
 
     } catch (error) {
         console.log(error);

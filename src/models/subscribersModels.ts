@@ -6,14 +6,19 @@ export interface SubscriberSchemaDocument {
     newsLetterOwnerId: string;
     createdAt?: object;
     updatedAt?: object;
+    source?: string
+    status?: string;
+
 }
 
 const subscriberSchema = new Schema({
     email: { type: String},
-    newsLetterOwnerId: { type: String}   
+    newsLetterOwnerId: { type: String},
+    source: { type: String, default: "By ShadyMedia Website" },
+    status: { type: String, default: "Subscribed" }   
 },{
     timestamps: true
 })
 
-const Subscriber = models.Subscriber || model<SubscriberSchemaDocument>("Subscriber", subscriberSchema);
+const Subscriber = models.subscribers || model<SubscriberSchemaDocument>("subscribers", subscriberSchema);
 export default Subscriber;

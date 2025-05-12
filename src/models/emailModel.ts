@@ -19,6 +19,6 @@ const emailSchema = new Schema(
     }
 );
 
-const Email = models.Emails || model<EmailSchemaDocument>("Emails", emailSchema)
+const Email = models.emails || model<EmailSchemaDocument>("emails", emailSchema)
 
 export default Email;
