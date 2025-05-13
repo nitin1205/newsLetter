@@ -1,7 +1,7 @@
 'use client'
-import { subscribersAnalytics } from '@/actions/subscribersAnalytics';
-import { useCallback, useEffect, useMemo } from 'react';
-import { useState } from 'react';
+
+import useSubscribersAnalytics from '@/shared/hooks/useSubscribersAnalytics';
+import { useEffect, useMemo, useState } from 'react';
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 
 
@@ -11,10 +11,7 @@ interface SubscribersAnalyticsData {
 }
 
 function SubscribersChart() {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const [subscribersData, setSubscriberData] = useState<any>([])
-    const [loading, setLoading] = useState(true)
-
+  const [loading, setLoading] = useState(true);
   //   const data = [
   //   {
   //     month: "Jan 2024",
@@ -45,23 +42,13 @@ function SubscribersChart() {
   //     count: 4300,
   //   },
   // ];
-
+    const { subscribersData } = useSubscribersAnalytics()
 
   const data: SubscribersAnalyticsData[] = useMemo(() => {
-    return []
-  }, []);
-
-
-  const getSubscriberAnalyticsData = useCallback(async () => {
-    await subscribersAnalytics().then((res) => {
-      setSubscriberData(JSON.parse(res as string))
-    }) 
-  }, []);
-
+    return [];
+  },[])
   
-  
-  
-  const dataSetter = useCallback(() => {
+  useEffect(() => {
     if(subscribersData.length !== 0) {
       subscribersData?.last7Months?.forEach((item: SubscribersAnalyticsData) => {
         data.push({
@@ -72,19 +59,7 @@ function SubscribersChart() {
       setLoading(false);
     } 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[subscribersData.length])
-
-  useEffect(() => {
-    getSubscriberAnalyticsData()
-  }, [getSubscriberAnalyticsData])
-
-  useEffect(() => {
-    dataSetter()
-  }, [dataSetter])
-  
-  console.log(data)
-
-
+  }, [subscribersData])
 
   return (
     <div className='my-5 p-5 bg-white w-full md:h-[55vh] xl:h-[60vh] border border-gray-200 shadow-xs'>

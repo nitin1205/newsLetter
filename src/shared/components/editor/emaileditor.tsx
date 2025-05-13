@@ -10,6 +10,7 @@ import { Button } from "@heroui/react";
 import { saveEmail } from "@/actions/saveEmail";
 import toast from "react-hot-toast";
 import { getEmailDetails } from "@/actions/getEmailDetails";
+import { sendEmail } from "@/shared/utils/emailSender";
 
 function Emaileditor({subjectTitle}: {subjectTitle: string}) {
     const [loading, setLoading] = useState(true);
@@ -22,9 +23,20 @@ function Emaileditor({subjectTitle}: {subjectTitle: string}) {
     const exportHtml = () => {
       const unlayer = emailEditorRef.current?.editor;
       
-      unlayer?.exportHtml((data) => {
-        const { design,  /*html */ } = data;
+      unlayer?.exportHtml(async (data) => {
+        const { design,  html  } = data;
         setJsonData(design);
+        console.log('subject')
+        console.log(subjectTitle);
+        console.log('content');
+        console.log(html)
+        await sendEmail({
+          userEmail: ['nitin.singh.120598@gmail.com'],
+          subject: subjectTitle,
+          content: html
+        }).then(() => {
+          toast.success('Email sent successfully')
+        })
       });
     };
 
